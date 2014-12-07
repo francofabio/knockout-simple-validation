@@ -1,7 +1,7 @@
 #knockout-simple-validation (ksv)
 
 
-This is a simple JavaScript library to validate knockout (http://knockoutjs.com) objects.
+This is a simple JavaScript library to validate knockout (http://knockoutjs.com) models.
 
 _<sub>My english is terrible, therefore, any revision will be welcome</sub>_
 
