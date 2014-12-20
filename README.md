@@ -14,6 +14,22 @@ _<sub>My english is terrible, therefore, any revision will be welcome</sub>_
 ```
 All dependencies are available in directory lib/vendor.
 
+##Built-in validation rules
+* required: Makes the observable property be required
+* email: Makes the observable property accept only email
+* url: Makes the observable property accept only url
+* nativeDate: Makes the observable property accept only a JavaScript Date object
+* date: Makes the observable property accept only a date as string in specific format
+* number: Makes the observable property accept only number objects
+* interger: Makes the observable property accept only number objects without decimal values.
+* max: Makes the observable property accept only values less than or equals to the specified value
+* min: Makes the observable property accept only values great than or equals to the specified value
+* maxlength: Makes the observable property accept only string values with length less than or equals to specified value
+* minlength: Makes the observable property accept only string values with length great than or equals to specified value
+* rangelength: Makes the observable property accept only string values with length in specified range
+* equalsTo: Makes the observalbe property accept only values equals to other property
+* remote: Makes the observable property to request a resource to check if value is valid
+
 ##Quickstart
 To use ksv in your project you have include the ksv.js script and its dependencies in your page.
 

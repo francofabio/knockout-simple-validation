@@ -33,7 +33,7 @@ module.exports = function(grunt) {
         src: [
           'src/ksv.pt_BR.js'
         ],
-        dest: 'dist/<%= pkg.dist %>-<%= pkg.version %>.pt_BR.js'
+        dest: 'dist/<%= pkg.dist %>.pt_BR-<%= pkg.version %>.js'
       }
     },
     uglify: {
@@ -46,7 +46,7 @@ module.exports = function(grunt) {
       },
       dist_lang_ptBR: {
         src: '<%= concat.dist_lang_ptBR.dest %>',
-        dest: 'dist/<%= pkg.dist %>-<%= pkg.version %>.pt_BR.min.js'
+        dest: 'dist/<%= pkg.dist %>.pt_BR-<%= pkg.version %>.min.js'
       }
     },
     jshint: {
