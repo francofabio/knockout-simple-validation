@@ -5,10 +5,9 @@ module('ksv.test.notifications');
 test('should receive global noticiations', function() {
     expect(10);
     function Person() {
-        ksv.notification.makeObservable(this);
-
-        this.name = ko.observable().extend({validator: {required: true, params: {owner: this, name: 'name'}}});
-        this.email = ko.observable().extend({validator: {required: true, email: true, params: {owner: this, name: 'email'}}});
+        var kvsForThis = ksv.notification.makeObservable(this);
+        this.name = kvsForThis.validatable('name', {required: true});
+        this.email = kvsForThis.validatable('email', {required: true, email: true});
     }
     var person1 = new Person();
 
@@ -40,9 +39,9 @@ test('should receive owner object noticiations', function() {
     expect(8);
     function Person() {
         var self = this;
-        ksv.notification.makeObservable(this);
-        this.name = ko.observable().extend({validator: {required: true, params: {owner: this, name: 'name'}}});
-        this.email = ko.observable().extend({validator: {required: true, email: true, params: {owner: this, name: 'email'}}});
+        var kvsForThis = ksv.notification.makeObservable(this);
+        this.name = kvsForThis.validatable('name', {required: true});
+        this.email = kvsForThis.validatable('email', {required: true, email: true});
 
         this.validationNotification = function(target, rule, instanceId, valid, message, name) {
             if (valid) return;
@@ -71,10 +70,9 @@ test('should receive owner object noticiations', function() {
 test('should receive specific object noticiations', function() {
     expect(4);
     function Person() {
-        ksv.notification.makeObservable(this);
-
-        this.name = ko.observable().extend({validator: {required: true, params: {owner: this}}});
-        this.email = ko.observable().extend({validator: {required: true, email: true, params: {owner: this}}});
+        var kvsForThis = ksv.notification.makeObservable(this);
+        this.name = kvsForThis.validatable({required: true});
+        this.email = kvsForThis.validatable({required: true, email: true});
     }
     var person1 = new Person();
 
@@ -97,10 +95,10 @@ test('should observe notifications for object', function() {
     expect(8);
     function Person() {
         var self = this;
-        ksv.notification.makeObservable(this);
-
-        this.name = ko.observable().extend({validator: {required: true, params: {owner: this, name: 'name'}}});
-        this.email = ko.observable().extend({validator: {required: true, email: true, params: {owner: this, name: 'email'}}});
+        var kvsForThis = ksv.notification.makeObservable(this);
+        this.name = kvsForThis.validatable('name', {required: true});
+        this.email = kvsForThis.validatable('email', {required: true, email: true});
+        
         var nameValidate = false;
         var emailValidate = false;
         this.errors.subscribe(function(val) {
@@ -130,5 +128,3 @@ test('should observe notifications for object', function() {
     person.name('John Galt');
     person.email('john.galt@gmail.com');
 });
-
-

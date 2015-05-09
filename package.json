@@ -1,8 +1,8 @@
 {
   "name": "knockout-simple-validation",
   "dist": "ksv",
-  "version": "1.0.0",
-  "description": "Simple JS library to validation knockout models",
+  "version": "1.0.1",
+  "description": "Simple JS library for validate knockout models",
   "author": {
     "name": "Binar Tecnologia",
     "email": "fabiofranco@binartecnologia.com.br"

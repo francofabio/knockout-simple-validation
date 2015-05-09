@@ -216,24 +216,25 @@ test('should create anonymous rule', function() {
 });
 
 test('should validate properties in object', function() {
-    expect(12);
+    expect(17);
     function Person() {
         this.id = 1000;
-        ksv.notification.makeObservable(this);
-        this.name = ko.observable().extend({validator: {required: true, params: {owner: this}}});
-        this.email = ko.observable().extend({validator: {required: true, email: true, params: {owner: this}}});
+        var kvsForThis = ksv.notification.makeObservable(this, {validationOnInit: true});
+        this.name = kvsForThis.validatable('name', {required: true});
+        this.email = kvsForThis.validatable('email', {required: true, email: true});
+        this.age = kvsForThis.validatable('age', {number: true, min: 18}, 21);
     }
     var person = new Person();
 
     ok(!person.isValid());
-    equal(person.errors().length, 0);
+    equal(person.errors().length, 2);
 
     person.name('');
     ok(!person.name.isValid());
     equal(person.name.error(), 'This field is required.');
 
     ok(!person.isValid());
-    equal(person.errors().length, 1);
+    equal(person.errors().length, 2);
 
     person.id = 1001;
 
@@ -244,8 +245,17 @@ test('should validate properties in object', function() {
     ok(!person.isValid());
     equal(person.errors().length, 2);
 
+    equal(person.age(), 21);
+    ok(person.age.isValid());
+    person.age(17);
+    ok(!person.isValid());
+    equal(person.age.error(), 'Please enter a value greater than or equal to 18');
+
+    equal(person.errors().length, 3);
+
     person.name('John Galt');
     person.email('john.galt@mail.com');
+    person.age(32);
 
     ok(person.isValid());
     equal(person.errors().length, 0);

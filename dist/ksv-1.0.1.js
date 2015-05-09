@@ -1,6 +1,6 @@
 /*
- * knockout-simple-validation v1.0.0 - 2014-12-07
- * Copyright (c) 2014 Binar Tecnologia;
+ * knockout-simple-validation v1.0.1 - 2015-05-09
+ * Copyright (c) 2015 Binar Tecnologia;
  */
 // Source: src/ksv.js
 /*
@@ -63,10 +63,13 @@
             }
             var pathToProperty = property.split('.');
             var value = obj;
-            for (var i in pathToProperty) {
+            for (var i = 0; i < pathToProperty.length; i++) {
                 var path = pathToProperty[i];
                 if (value.hasOwnProperty(path)) {
                     value = value[path];
+                    if (value === null || value === undefined) {
+                        return undefined;
+                    }
                 } else {
                     return undefined;
                 }
@@ -88,6 +91,31 @@
      */
     ksv.notification = (function() {
         var subscribes = [];
+
+        function ObservableInstance(obj) {
+            this.obj = obj;
+        }
+        ObservableInstance.prototype.validatable = function () {
+            var rules, name, value;
+            if (typeof(arguments[0]) === 'string') {
+                name = arguments[0];
+                rules = arguments[1];
+                value = arguments[2];
+            } else {
+                rules = arguments[0];
+                value = arguments[1];
+            }
+            var validatorOptions = Object.create(rules);
+            if (!validatorOptions.hasOwnProperty('params')) {
+                validatorOptions.params = {};
+            }
+            validatorOptions.params['owner'] = this.obj;
+            if (name) {
+                validatorOptions.params['name'] = name;
+            }
+            return ko.observable(value).extend({validator: validatorOptions});
+        };
+
         return {
             subscribe: function(fn, obj) {
                 var subs = {fn: fn};
@@ -104,7 +132,8 @@
                 obj.__validationObserver__ = ko.observableArray([]);
                 return obj.__validationObserver__;
             },
-            makeObservable: function(obj) {
+            makeObservable: function(obj, validationParams) {
+                obj.validationParams = validationParams;
                 obj.errors = ksv.notification.observeValidations(obj);
                 obj.isValidationInitialized = ko.observable(false);
                 obj.isValid = ko.pureComputed(function() {
@@ -113,8 +142,10 @@
                     }
                     return obj.errors().length === 0;
                 }, obj);
+                return new ObservableInstance(obj);
             },
             notify: function(target, owner, rule, instanceId, valid, message, name) {
+                /* jshint shadow:true */ //Disable lint for use i in multiples for loop
                 //Notify object
                 if (owner && typeof(owner.validationNotification) === 'function') {
                     owner.validationNotification.call(owner, target, rule, instanceId, valid, message, name);
@@ -132,7 +163,7 @@
                     } else {
                         var exists = false;
                         var validationArray = validationObserver();
-                        for (var x in  validationArray) {
+                        for (var x = 0; x < validationArray.length; x++) {
                             var item = validationArray[x];
                             if (item.instanceId === instanceId) {
                                 exists = true;
@@ -152,7 +183,7 @@
                     }
                 }
                 //Notify subscribes
-                for (var i in subscribes) {
+                for (var i = 0; i < subscribes.length; i++) {
                     var subscribe = subscribes[i];
                     if ('owner' in subscribe) {
                         /* jshint -W116 */ //Ignore hint to use simple equals (==)
@@ -347,6 +378,9 @@
             var validationRules = []; //The rules for validation, each item is a instance of the ValidationRuleExecutor
             var applyInvalidValue = utils.get(this.params, 'applyInvalidValue');
             var validationOnInit = utils.get(this.params, 'validationOnInit');
+            if (validationOnInit === undefined && this.params && this.params.owner && this.params.owner.validationParams) {
+                validationOnInit = this.params.owner.validationParams.validationOnInit;
+            }
 
             //One validator by observable is allowed
             if (target.__validatorCreated__ === undefined) {
@@ -443,7 +477,7 @@
                         valid = self.applyValidationResult(ruleExecutor, value, validationResult);
                     };
                 }
-                for (var i in validationRules) {
+                for (var i = 0; i < validationRules.length; i++) {
                     var ruleExecutor = validationRules[i];
                     if (ruleExecutor.settings.async) {
                         //When rule is async on callback but the param async is disable, force synchronous execution 
@@ -478,6 +512,10 @@
             }, this);
             this.targetWrapper.isValid = isValidObservable;
             this.targetWrapper.error   = errorObservable;
+            this.targetWrapper.validate = function() {
+                self.validate(target());
+                return this;
+            };
             if (validationOnInit) {
                 this.targetWrapper(target());
             }

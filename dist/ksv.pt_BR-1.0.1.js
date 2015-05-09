@@ -1,6 +1,6 @@
 /*
- * knockout-simple-validation v1.0.0 - 2014-12-10
- * Copyright (c) 2014 Binar Tecnologia;
+ * knockout-simple-validation v1.0.1 - 2015-05-09
+ * Copyright (c) 2015 Binar Tecnologia;
  */
 // Source: src/ksv.pt_BR.js
 /*

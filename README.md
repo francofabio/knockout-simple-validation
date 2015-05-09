@@ -87,12 +87,9 @@ The two examples below demonstrate a basic use of the library.
     <script src="assets/js/vendor/ksv.min.js"></script>
     <script>
        function PersonModel() {
-         var self = this;
-         ksv.notification.makeObservable(this);
-         //The owner parameter represents the object that property is hosted
-         this.name = ko.observable().extend({validator: {required: true, params: {owner: this}}});
-         this.email = ko.observable().extend({validator: {required: true, email: true, params: {owner: this}}});
-         this.age = ko.observable().extend({validator: {number: true, min: 18, max: 90, params: {owner: this}}});
+         var ksvForThis = ksv.notification.makeObservable(this);
+         this.name = ksvForThis.validatable('name', {required: true});
+         this.email = ksvForThis.validatable('email', {required: true, email: true});
        }
        var personModel = new PersonModel();
        ko.applyBindings(personModel);
