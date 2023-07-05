@@ -29,7 +29,7 @@ test('should execute remote validate', function() {
 
             validate3();
         });
-        username('luana');
+        username('fabio');
     };
     var validate3 = function() {
         subscribeHandle = ksv.notification.subscribe(function(target, owner, rule, instanceId, valid, message) {
@@ -80,7 +80,7 @@ test('should execute remote validate checkResult', function() {
 
             validate3();
         });
-        username('luana');
+        username('fabio');
     };
     var validate3 = function() {
         subscribeHandle = ksv.notification.subscribe(function(target, owner, rule, instanceId, valid, message) {
@@ -131,7 +131,7 @@ test('should execute remote validate prepValidationData', function() {
 
             validate3();
         });
-        username('luana');
+        username('fabio');
     };
     var validate3 = function() {
         subscribeHandle = ksv.notification.subscribe(function(target, owner, rule, instanceId, valid, message) {
@@ -200,7 +200,7 @@ test('should execute remote validate prepValidationData and checkResult', functi
 
             validate3();
         });
-        username('luana');
+        username('fabio');
     };
     var validate3 = function() {
         subscribeHandle = ksv.notification.subscribe(function(target, owner, rule, instanceId, valid, message) {
@@ -239,7 +239,7 @@ test('should execute remote validate synchronous', function() {
     equal(username.error(), null);
     equal(username(), 'john');
 
-    username('luana');
+    username('fabio');
     ok(!username.isValid());
     equal(username.error(), 'Este username já está em uso por outro usuário');
 
@@ -263,7 +263,7 @@ test('should execute remote validate synchronous with url defined as function', 
     equal(username.error(), null);
     equal(username(), 'john');
 
-    username('luana');
+    username('fabio');
     ok(!username.isValid());
     equal(username.error(), 'Este username já está em uso por outro usuário');
 

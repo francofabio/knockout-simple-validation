@@ -6,7 +6,6 @@
 
     var allUsers = [
         { username: 'franco' },
-        { username: 'luana' },
         { username: 'karol' },
         { username: 'gabi' },
         { username: 'toby' },
